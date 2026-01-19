@@ -1,0 +1,16 @@
+{
+  "name": "cozfair",
+  "version": "1.0.0",
+  "description": "Cozfair real-time chat app with WebSocket",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["chat", "websocket", "cozfair", "dark-mode"],
+  "author": "Doc",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "ws": "^8.19.0"
+  }
+}

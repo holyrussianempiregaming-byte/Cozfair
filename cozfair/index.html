@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cozfair — Dark Mode</title>
+  <style>
+    body {
+      margin: 0;
+      font: 15px/1.6 "Nunito", system-ui;
+      background: #0f1216;
+      color: #e6e8eb;
+    }
+    .app { display: grid; grid-template-columns: 200px 1fr; height: 100vh; }
+    aside { background: #151a21; padding: 12px; border-right: 1px solid #2a313b; }
+    .channel { padding: 8px; cursor: pointer; color: #9aa3ad; }
+    .channel.active { color: #ff8a4c; font-weight: 700; }
+    main { display: flex; flex-direction: column; }
+    #chat { flex: 1; padding: 16px; overflow-y: auto; }
+    .message { margin-bottom: 12px; }
+    .meta { font-size: 12px; color: #9aa3ad; }
+    form { display: flex; padding: 12px; background: #151a21; }
+    input { flex: 1; padding: 10px; border-radius: 8px; border: none; background: #1b212a; color: #e6e8eb; }
+    button { margin-left: 8px; padding: 10px 14px; border-radius: 8px; border: none; background: #ff8a4c; color: #0f1216; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="channel active"># welcome</div>
+      <div class="channel"># cozy-corner</div>
+    </aside>
+    <main>
+      <div id="chat"></div>
+      <form id="composer">
+        <input id="message" type="text" placeholder="Message #welcome" />
+        <button type="submit">Send</button>
+      </form>
+    </main>
+  </div>
+  <script>
+    // IMPORTANT: replace this with your actual public server URL after deployment
+    const socket = new WebSocket("wss://your-app-name.onrender.com");
+
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("composer");
+    const input = document.getElementById("message");
+
+    socket.onmessage = (event) => {
+      const msg = document.createElement("div");
+      msg.className = "message";
+      msg.innerHTML = `<div class="meta">Friend:</div> ${event.data}`;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    };
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      if (input.value.trim()) {
+        // prepend your nickname "Doc" to outgoing messages
+        const message = `Doc: ${input.value}`;
+        socket.send(message);
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
